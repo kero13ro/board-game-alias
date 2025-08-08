@@ -14,34 +14,34 @@ export const Scoreboard = ({
   className = '',
 }: ScoreboardProps) => {
   return (
-    <div className={`flex justify-center items-center gap-8 ${className}`}>
+    <div className={`flex justify-center items-center gap-8 p-4 ${className}`}>
       {/* Red Team */}
       <div
-        className={`text-center p-4 rounded-lg transition-all ${
+        className={`card bg-base-200 shadow-lg text-center p-6 transition-all ${
           currentTeam === 'red'
-            ? 'bg-red-100 border-2 border-red-400'
-            : 'bg-gray-100'
+            ? 'ring-2 ring-error bg-error/10'
+            : ''
         }`}
       >
-        <div className="text-red-600 font-bold text-lg mb-1">紅隊</div>
-        <div className="text-3xl font-bold text-red-700">{redScore}</div>
-        <div className="text-sm text-gray-600">分</div>
+        <div className="text-error font-bold text-lg mb-1">紅隊</div>
+        <div className="text-3xl font-bold text-error">{redScore}</div>
+        <div className="text-sm text-base-content/70">分</div>
       </div>
 
       {/* VS Divider */}
-      <div className="text-2xl font-bold text-gray-400">VS</div>
+      <div className="text-2xl font-bold text-base-content/60 bg-base-300 px-3 py-1 rounded-full">VS</div>
 
       {/* White Team */}
       <div
-        className={`text-center p-4 rounded-lg transition-all ${
+        className={`card bg-base-200 shadow-lg text-center p-6 transition-all ${
           currentTeam === 'white'
-            ? 'bg-gray-100 border-2 border-gray-400'
-            : 'bg-gray-50'
+            ? 'ring-2 ring-neutral bg-neutral/10'
+            : ''
         }`}
       >
-        <div className="text-gray-600 font-bold text-lg mb-1">白隊</div>
-        <div className="text-3xl font-bold text-gray-700">{whiteScore}</div>
-        <div className="text-sm text-gray-600">分</div>
+        <div className="text-neutral font-bold text-lg mb-1">白隊</div>
+        <div className="text-3xl font-bold text-neutral">{whiteScore}</div>
+        <div className="text-sm text-base-content/70">分</div>
       </div>
     </div>
   )

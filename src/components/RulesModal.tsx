@@ -7,20 +7,20 @@ export const RulesModal = ({ isOpen, onClose }: RulesModalProps) => {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-6 z-50">
+      <div className="card bg-base-100 shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+        <div className="card-body p-6">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold text-gray-800">遊戲規則</h2>
+            <h2 className="text-2xl font-bold text-base-content">遊戲規則</h2>
             <button
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-700 text-xl"
+              className="btn btn-sm btn-circle btn-ghost text-xl"
             >
               ×
             </button>
           </div>
 
-          <div className="space-y-4 text-gray-700">
+          <div className="space-y-4 text-base-content/90">
             <div>
               <h3 className="font-semibold mb-2">基本規則：</h3>
               <ul className="space-y-2 text-sm">
@@ -52,7 +52,7 @@ export const RulesModal = ({ isOpen, onClose }: RulesModalProps) => {
           <div className="mt-6 flex justify-end">
             <button
               onClick={onClose}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+              className="btn btn-primary px-6 py-2 font-medium"
             >
               知道了
             </button>

@@ -27,7 +27,7 @@ function App() {
     }
   }
 
-  return <div className="app">{renderCurrentPhase()}</div>
+  return <div className="min-h-screen bg-base-200 p-4">{renderCurrentPhase()}</div>
 }
 
 export default App

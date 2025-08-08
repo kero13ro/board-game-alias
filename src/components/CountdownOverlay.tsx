@@ -21,12 +21,12 @@ export const CountdownOverlay = () => {
   }, [countdownValue, setPhase])
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
-      <div className="text-center">
-        <div className="text-8xl font-bold text-white mb-4 animate-pulse">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="card bg-base-100/10 backdrop-blur-md border border-base-content/20 p-8 text-center">
+        <div className="text-8xl font-bold text-white mb-4 animate-pulse drop-shadow-lg">
           {countdownValue}
         </div>
-        <div className="text-2xl text-white font-medium">
+        <div className="text-2xl text-white font-medium drop-shadow-md">
           {countdownValue === 3
             ? '準備開始...'
             : countdownValue === 2

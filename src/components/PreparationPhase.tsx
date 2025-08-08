@@ -20,14 +20,14 @@ export const PreparationPhase = () => {
 
   if (winner) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-yellow-100 to-orange-200 flex items-center justify-center p-4">
-        <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full text-center">
+      <div className="min-h-screen bg-gradient-to-br from-warning/20 to-accent/20 flex items-center justify-center p-6">
+        <div className="card bg-base-100 shadow-xl p-8 max-w-md w-full text-center">
           <div className="text-6xl mb-4">🎉</div>
-          <h1 className="text-3xl font-bold text-gray-800 mb-4">遊戲結束！</h1>
+          <h1 className="text-3xl font-bold text-base-content mb-4">遊戲結束！</h1>
           <div className="text-xl mb-6">
             恭喜{' '}
             <span
-              className={`font-bold ${winner === 'red' ? 'text-red-600' : 'text-gray-600'}`}
+              className={`font-bold ${winner === 'red' ? 'text-error' : 'text-neutral'}`}
             >
               {teamNames[winner]}
             </span>{' '}
@@ -40,7 +40,7 @@ export const PreparationPhase = () => {
           />
           <button
             onClick={() => useGameStore.getState().resetGame()}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-lg font-medium transition-colors"
+            className="btn btn-primary px-8 py-3 font-medium"
           >
             重新開始
           </button>
@@ -50,9 +50,9 @@ export const PreparationPhase = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-purple-200 flex flex-col justify-center items-center p-4">
-      <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
-        <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">
+    <div className="min-h-screen bg-gradient-to-br from-primary/20 to-accent/20 flex flex-col justify-center items-center p-6">
+      <div className="card bg-base-100 shadow-xl p-8 max-w-md w-full">
+        <h1 className="text-3xl font-bold text-center text-base-content mb-8">
           Board Game Alias
         </h1>
 
@@ -65,11 +65,11 @@ export const PreparationPhase = () => {
         />
 
         {/* Current Team Indicator */}
-        <div className="text-center mb-8">
-          <div className="text-lg text-gray-600 mb-2">準備猜題</div>
+        <div className="card bg-base-200 shadow-inner p-4 text-center mb-8">
+          <div className="text-lg text-base-content/80 mb-2">準備猜題</div>
           <div
             className={`text-2xl font-bold ${
-              currentTeam === 'red' ? 'text-red-600' : 'text-gray-600'
+              currentTeam === 'red' ? 'text-error' : 'text-neutral'
             }`}
           >
             {teamNames[currentTeam]}
@@ -80,7 +80,7 @@ export const PreparationPhase = () => {
         <div className="space-y-4">
           <button
             onClick={toggleRulesModal}
-            className="w-full bg-gray-500 hover:bg-gray-600 text-white py-3 px-6 rounded-lg font-medium transition-colors"
+            className="btn btn-neutral w-full py-3 px-6 font-medium"
           >
             規則
           </button>
@@ -89,9 +89,9 @@ export const PreparationPhase = () => {
             onClick={startCountdown}
             className={`w-full py-3 px-6 rounded-lg font-medium transition-colors ${
               currentTeam === 'red'
-                ? 'bg-red-500 hover:bg-red-600 text-white'
-                : 'bg-gray-500 hover:bg-gray-600 text-white'
-            }`}
+                ? 'btn-error'
+                : 'btn-neutral'
+            } btn w-full py-3 px-6 font-medium`}
           >
             準備好了
           </button>

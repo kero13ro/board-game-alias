@@ -116,25 +116,25 @@ export const AnswerPhase = () => {
 
     if (currentX > SWIPE_THRESHOLD) {
       return (
-        <div className="absolute top-4 left-4 bg-green-500 text-white px-4 py-2 rounded-lg font-bold">
+        <div className="absolute top-4 left-4 badge badge-success text-white px-4 py-2 text-base font-bold">
           答對！ ✓
         </div>
       )
     } else if (currentX < -SWIPE_THRESHOLD) {
       return (
-        <div className="absolute top-4 right-4 bg-orange-500 text-white px-4 py-2 rounded-lg font-bold">
+        <div className="absolute top-4 right-4 badge badge-warning text-white px-4 py-2 text-base font-bold">
           跳過！ →
         </div>
       )
     } else if (currentX > 50) {
       return (
-        <div className="absolute top-4 left-4 bg-green-200 text-green-800 px-4 py-2 rounded-lg">
+        <div className="absolute top-4 left-4 badge badge-success badge-outline px-4 py-2 text-base">
           向右滑答對 →
         </div>
       )
     } else if (currentX < -50) {
       return (
-        <div className="absolute top-4 right-4 bg-orange-200 text-orange-800 px-4 py-2 rounded-lg">
+        <div className="absolute top-4 right-4 badge badge-warning badge-outline px-4 py-2 text-base">
           ← 向左滑跳過
         </div>
       )
@@ -144,21 +144,23 @@ export const AnswerPhase = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-100 to-blue-200 flex flex-col justify-center items-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-primary/20 to-secondary/20 flex flex-col justify-center items-center p-6">
       <div className="w-full max-w-md">
         {/* Timer */}
-        <Timer className="mb-8" />
+        <div className="card bg-base-100 shadow-xl p-4 mb-8">
+          <Timer className="" />
+        </div>
 
         {/* Team and Score Info */}
-        <div className="text-center mb-6">
+        <div className="card bg-base-100 shadow-lg p-4 text-center mb-6">
           <div
             className={`text-xl font-bold ${
-              currentTeam === 'red' ? 'text-red-600' : 'text-gray-600'
+              currentTeam === 'red' ? 'text-error' : 'text-neutral'
             }`}
           >
             {teamNames[currentTeam]}
           </div>
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-base-content/70">
             本回合答對：{correctAnswers} 題
           </div>
         </div>
@@ -167,7 +169,7 @@ export const AnswerPhase = () => {
         <div className="relative">
           <div
             ref={cardRef}
-            className="bg-white rounded-lg shadow-lg p-12 text-center transform transition-transform duration-200 select-none cursor-grab active:cursor-grabbing"
+            className="card bg-base-100 shadow-xl p-12 text-center transform transition-transform duration-200 select-none cursor-grab active:cursor-grabbing"
             style={{
               transform: `translateX(${currentX}px) rotate(${currentX * 0.1}deg)`,
             }}
@@ -179,10 +181,10 @@ export const AnswerPhase = () => {
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
           >
-            <div className="text-4xl font-bold text-gray-800 mb-4">
+            <div className="text-4xl font-bold text-base-content mb-4">
               {currentQuestion}
             </div>
-            <div className="text-sm text-gray-500">
+            <div className="text-sm text-base-content/60">
               題目 #{currentQuestionIndex + 1}
             </div>
           </div>
@@ -192,10 +194,10 @@ export const AnswerPhase = () => {
         </div>
 
         {/* Instructions */}
-        <div className="text-center mt-8 space-y-2">
-          <div className="text-sm text-gray-600">向右滑動 = 答對 ✓</div>
-          <div className="text-sm text-gray-600">向左滑動 = 跳過 ←</div>
-          <div className="text-xs text-gray-500 mt-4">
+        <div className="card bg-base-100/80 backdrop-blur shadow-lg p-6 text-center mt-8 space-y-2">
+          <div className="text-sm text-base-content/80">向右滑動 = 答對 ✓</div>
+          <div className="text-sm text-base-content/80">向左滑動 = 跳過 ←</div>
+          <div className="text-xs text-base-content/60 mt-4">
             描述這個詞語，但不能說出答案中的文字！
           </div>
         </div>
@@ -204,13 +206,13 @@ export const AnswerPhase = () => {
         <div className="flex gap-4 mt-8 md:hidden">
           <button
             onClick={handleSkipQuestion}
-            className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 px-6 rounded-lg font-medium transition-colors"
+            className="btn btn-warning flex-1 py-3 px-6 font-medium"
           >
             跳過
           </button>
           <button
             onClick={handleCorrectAnswer}
-            className="flex-1 bg-green-500 hover:bg-green-600 text-white py-3 px-6 rounded-lg font-medium transition-colors"
+            className="btn btn-success flex-1 py-3 px-6 font-medium"
           >
             答對
           </button>

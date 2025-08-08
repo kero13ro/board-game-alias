@@ -27,15 +27,15 @@ export const Timer = ({ className = '' }: TimerProps) => {
   const isLowTime = timeLeft <= 10
 
   return (
-    <div className={`text-center ${className}`}>
+    <div className={`text-center p-4 ${className}`}>
       <div
         className={`text-6xl font-bold transition-colors ${
-          isLowTime ? 'text-red-500 animate-pulse' : 'text-blue-600'
+          isLowTime ? 'text-error animate-pulse' : 'text-primary'
         }`}
       >
         {minutes}:{seconds.toString().padStart(2, '0')}
       </div>
-      <div className="text-lg text-gray-600 mt-2">剩餘時間</div>
+      <div className="text-lg text-base-content/70 mt-2">剩餘時間</div>
     </div>
   )
 }
