@@ -1,3 +1,4 @@
+import { motion } from 'motion/react'
 import { useGameStore } from '../store'
 import { Scoreboard } from './Scoreboard'
 import { RulesModal } from './RulesModal'
@@ -77,25 +78,34 @@ export const PreparationPhase = () => {
         </div>
 
         {/* Action Buttons */}
-        <div className="space-y-4">
-          <button
+        <motion.div 
+          className="space-y-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.4 }}
+        >
+          <motion.button
             onClick={toggleRulesModal}
             className="btn btn-neutral w-full py-3 px-6 font-medium"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
             規則
-          </button>
+          </motion.button>
 
-          <button
+          <motion.button
             onClick={startCountdown}
             className={`w-full py-3 px-6 rounded-lg font-medium transition-colors ${
               currentTeam === 'red'
                 ? 'btn-error'
                 : 'btn-neutral'
             } btn w-full py-3 px-6 font-medium`}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
             準備好了
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
       </div>
 
       {/* Rules Modal */}
