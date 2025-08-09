@@ -2,6 +2,7 @@ import { motion } from 'motion/react'
 import { useGameStore } from '../store'
 import { Timer } from './Timer'
 import { getCurrentQuestion } from '../lib/questions'
+import { TEAM_NAMES, getTeamColorClass } from '../lib/constants'
 
 export const AnswerPhase = () => {
   const {
@@ -14,10 +15,6 @@ export const AnswerPhase = () => {
   
   const currentQuestion = getCurrentQuestion(currentQuestionIndex)
 
-  const teamNames = {
-    red: '紅隊',
-    blue: '藍隊',
-  }
 
   const handleCorrectClick = () => {
     handleCorrectAnswer()
@@ -39,11 +36,9 @@ export const AnswerPhase = () => {
         {/* Team and Score Info */}
         <div className="card bg-base-100 shadow-lg p-4 text-center">
           <div
-            className={`text-lg font-bold mb-2 ${
-              currentTeam === 'red' ? 'text-error' : 'text-primary'
-            }`}
+            className={`text-lg font-bold mb-2 ${getTeamColorClass(currentTeam, 'text')}`}
           >
-            {teamNames[currentTeam]}
+            {TEAM_NAMES[currentTeam]}
           </div>
           <div className="text-xs text-base-content/70">
             本回合答對：{correctAnswers} 題

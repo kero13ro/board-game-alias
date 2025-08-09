@@ -2,6 +2,7 @@ import { motion } from 'motion/react'
 import { useGameStore } from '../store'
 import { Scoreboard } from './Scoreboard'
 import { RulesModal } from './RulesModal'
+import { TEAM_NAMES, getTeamColorClass } from '../lib/constants'
 
 export const PreparationPhase = () => {
   const {
@@ -14,23 +15,18 @@ export const PreparationPhase = () => {
     winner,
   } = useGameStore()
 
-  const teamNames = {
-    red: '紅隊',
-    blue: '藍隊',
-  }
-
   if (winner) {
     return (
       <div className="min-h-screen from-warning/20 to-accent/20 flex items-center justify-center p-6">
         <div className="card bg-base-100 shadow-xl p-8 max-w-md w-full text-center">
           <div className="text-6xl mb-4">🎉</div>
-          <h1 className="text-3xl font-bold text-base-content mb-4">遊戲結束！</h1>
+          <h1 className="text-3xl font-bold text-base-content mb-4">
+            遊戲結束！
+          </h1>
           <div className="text-xl mb-6">
             恭喜{' '}
-            <span
-              className={`font-bold ${winner === 'red' ? 'text-error' : 'text-primary'}`}
-            >
-              {teamNames[winner]}
+            <span className={`font-bold ${getTeamColorClass(winner, 'text')}`}>
+              {TEAM_NAMES[winner]}
             </span>{' '}
             獲勝！
           </div>
@@ -53,7 +49,6 @@ export const PreparationPhase = () => {
   return (
     <div className="min-h-screen from-primary/20 to-accent/20 flex flex-col justify-center items-center p-6">
       <div className="card bg-base-100 shadow-xl p-8 max-w-md w-full">
-
         <Scoreboard
           redScore={redTeamScore}
           blueScore={blueTeamScore}
@@ -64,16 +59,14 @@ export const PreparationPhase = () => {
         <div className="card bg-base-200 shadow-inner p-4 text-center mb-8">
           <div className="text-lg text-base-content/80 mb-2">準備猜題</div>
           <div
-            className={`text-2xl font-bold ${
-              currentTeam === 'red' ? 'text-error' : 'text-primary'
-            }`}
+            className={`text-2xl font-bold ${getTeamColorClass(currentTeam, 'text')}`}
           >
-            {teamNames[currentTeam]}
+            {TEAM_NAMES[currentTeam]}
           </div>
         </div>
 
         {/* Action Buttons */}
-        <motion.div 
+        <motion.div
           className="space-y-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -91,9 +84,7 @@ export const PreparationPhase = () => {
           <motion.button
             onClick={startCountdown}
             className={`w-full py-3 px-6 rounded-lg font-medium transition-colors ${
-              currentTeam === 'red'
-                ? 'btn-error'
-                : 'btn-primary'
+              currentTeam === 'red' ? 'btn-error' : 'btn-primary'
             } btn w-full py-3 px-6 font-medium`}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}

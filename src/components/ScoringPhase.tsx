@@ -1,5 +1,6 @@
 import { useGameStore } from '../store'
 import { Scoreboard } from './Scoreboard'
+import { TEAM_NAMES, getTeamColorClass } from '../lib/constants'
 
 export const ScoringPhase = () => {
   const {
@@ -15,10 +16,6 @@ export const ScoringPhase = () => {
     setPhase,
   } = useGameStore()
 
-  const teamNames = {
-    red: '紅隊',
-    blue: '藍隊',
-  }
 
   const handleConfirm = () => {
     resetRound()
@@ -48,9 +45,9 @@ export const ScoringPhase = () => {
         <div className="text-center mb-4">
           <div className="text-xs text-base-content/70 mb-3">
             <span
-              className={currentTeam === 'red' ? 'text-error' : 'text-primary'}
+              className={getTeamColorClass(currentTeam, 'text')}
             >
-              {teamNames[currentTeam]}
+              {TEAM_NAMES[currentTeam]}
             </span>
             答對 {correctAnswers} 題
           </div>
@@ -130,7 +127,7 @@ export const ScoringPhase = () => {
 
         {/* Next Team Indicator */}
         <div className="text-center mt-3 text-xs text-base-content/70">
-          下一回合：{currentTeam === 'red' ? teamNames.blue : teamNames.red}
+          下一回合：{currentTeam === 'red' ? TEAM_NAMES.blue : TEAM_NAMES.red}
         </div>
       </div>
     </div>

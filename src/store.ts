@@ -1,9 +1,7 @@
 import { create } from 'zustand'
 import type { GameState, GameActions, Team, GamePhase } from './types'
 import { getCurrentQuestion } from './lib/questions'
-
-const WINNING_SCORE = 30
-const ROUND_DURATION = 30 // 60 seconds
+import { WINNING_SCORE, ROUND_DURATION } from './lib/constants'
 
 interface GameStore extends GameState, GameActions {}
 
@@ -86,30 +84,36 @@ export const useGameStore = create<GameStore>((set, get) => ({
   // Question handling
   handleCorrectAnswer: () => {
     const { currentTeam, correctAnswers, currentQuestionIndex } = get()
-    
+
     const currentQuestion = getCurrentQuestion(currentQuestionIndex)
-    
+
     set((state) => ({
       correctAnswers: correctAnswers + 1,
       currentQuestionIndex: currentQuestionIndex + 1,
-      successQuestions: [...state.successQuestions, {
-        id: currentQuestionIndex,
-        text: currentQuestion.text
-      }]
+      successQuestions: [
+        ...state.successQuestions,
+        {
+          id: currentQuestionIndex,
+          text: currentQuestion.text,
+        },
+      ],
     }))
     get().updateScore(currentTeam, 1)
   },
 
   handleSkipQuestion: () => {
     const { currentQuestionIndex } = get()
-    
+
     const currentQuestion = getCurrentQuestion(currentQuestionIndex)
-    
+
     set((state) => ({
-      skippedQuestions: [...state.skippedQuestions, {
-        id: currentQuestionIndex,
-        text: currentQuestion.text
-      }],
+      skippedQuestions: [
+        ...state.skippedQuestions,
+        {
+          id: currentQuestionIndex,
+          text: currentQuestion.text,
+        },
+      ],
       currentQuestionIndex: currentQuestionIndex + 1,
     }))
   },
