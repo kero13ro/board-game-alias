@@ -27,7 +27,7 @@ function App() {
     }
   }
 
-  return <div >{renderCurrentPhase()}</div>
+  return <div>{renderCurrentPhase()}</div>
 }
 
 export default App

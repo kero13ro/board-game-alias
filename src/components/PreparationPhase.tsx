@@ -6,7 +6,7 @@ import { RulesModal } from './RulesModal'
 export const PreparationPhase = () => {
   const {
     redTeamScore,
-    whiteTeamScore,
+    blueTeamScore,
     currentTeam,
     showRulesModal,
     toggleRulesModal,
@@ -16,19 +16,19 @@ export const PreparationPhase = () => {
 
   const teamNames = {
     red: '紅隊',
-    white: '白隊',
+    blue: '藍隊',
   }
 
   if (winner) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-warning/20 to-accent/20 flex items-center justify-center p-6">
+      <div className="min-h-screen from-warning/20 to-accent/20 flex items-center justify-center p-6">
         <div className="card bg-base-100 shadow-xl p-8 max-w-md w-full text-center">
           <div className="text-6xl mb-4">🎉</div>
           <h1 className="text-3xl font-bold text-base-content mb-4">遊戲結束！</h1>
           <div className="text-xl mb-6">
             恭喜{' '}
             <span
-              className={`font-bold ${winner === 'red' ? 'text-error' : 'text-base-content'}`}
+              className={`font-bold ${winner === 'red' ? 'text-error' : 'text-primary'}`}
             >
               {teamNames[winner]}
             </span>{' '}
@@ -36,7 +36,7 @@ export const PreparationPhase = () => {
           </div>
           <Scoreboard
             redScore={redTeamScore}
-            whiteScore={whiteTeamScore}
+            blueScore={blueTeamScore}
             className="mb-6"
           />
           <button
@@ -51,12 +51,12 @@ export const PreparationPhase = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/20 to-accent/20 flex flex-col justify-center items-center p-6">
+    <div className="min-h-screen from-primary/20 to-accent/20 flex flex-col justify-center items-center p-6">
       <div className="card bg-base-100 shadow-xl p-8 max-w-md w-full">
 
         <Scoreboard
           redScore={redTeamScore}
-          whiteScore={whiteTeamScore}
+          blueScore={blueTeamScore}
           currentTeam={currentTeam}
           className="mb-8"
         />
@@ -65,7 +65,7 @@ export const PreparationPhase = () => {
           <div className="text-lg text-base-content/80 mb-2">準備猜題</div>
           <div
             className={`text-2xl font-bold ${
-              currentTeam === 'red' ? 'text-error' : 'text-base-content'
+              currentTeam === 'red' ? 'text-error' : 'text-primary'
             }`}
           >
             {teamNames[currentTeam]}
@@ -93,7 +93,7 @@ export const PreparationPhase = () => {
             className={`w-full py-3 px-6 rounded-lg font-medium transition-colors ${
               currentTeam === 'red'
                 ? 'btn-error'
-                : 'btn-neutral'
+                : 'btn-primary'
             } btn w-full py-3 px-6 font-medium`}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}

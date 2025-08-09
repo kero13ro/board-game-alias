@@ -1,6 +1,6 @@
 export type GamePhase = 'preparation' | 'countdown' | 'answer' | 'scoring'
 
-export type Team = 'red' | 'white'
+export type Team = 'red' | 'blue'
 
 export interface Question {
   id: string | number
@@ -13,7 +13,7 @@ export interface GameState {
 
   // Team and scoring
   redTeamScore: number
-  whiteTeamScore: number
+  blueTeamScore: number
   currentTeam: Team
 
   // Round management

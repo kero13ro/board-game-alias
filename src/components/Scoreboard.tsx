@@ -2,14 +2,14 @@ import type { Team } from '../types'
 
 interface ScoreboardProps {
   redScore: number
-  whiteScore: number
+  blueScore: number
   currentTeam?: Team
   className?: string
 }
 
 export const Scoreboard = ({
   redScore,
-  whiteScore,
+  blueScore,
   currentTeam,
   className = '',
 }: ScoreboardProps) => {
@@ -31,16 +31,16 @@ export const Scoreboard = ({
       {/* VS Divider */}
       <div className="text-lg font-bold text-base-content/60 bg-base-300 px-2 py-1 rounded-full">VS</div>
 
-      {/* White Team */}
+      {/* Blue Team */}
       <div
         className={`card bg-base-200 shadow-lg text-center p-3 transition-all ${
-          currentTeam === 'white'
-            ? 'ring-2 ring-base-content bg-base-content/10'
+          currentTeam === 'blue'
+            ? 'ring-2 ring-primary bg-primary/10'
             : ''
         }`}
       >
-        <div className="text-base-content font-bold text-sm mb-1">白隊</div>
-        <div className="text-2xl font-bold text-base-content">{whiteScore}</div>
+        <div className="text-primary font-bold text-sm mb-1">藍隊</div>
+        <div className="text-2xl font-bold text-primary">{blueScore}</div>
         <div className="text-xs text-base-content/70">分</div>
       </div>
     </div>

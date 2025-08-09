@@ -11,7 +11,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   // Initial state
   currentPhase: 'preparation',
   redTeamScore: 0,
-  whiteTeamScore: 0,
+  blueTeamScore: 0,
   currentTeam: 'red',
   currentRound: 1,
   timeLeft: ROUND_DURATION,
@@ -49,7 +49,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       }))
     } else {
       set((state) => ({
-        whiteTeamScore: Math.max(0, state.whiteTeamScore + points),
+        blueTeamScore: Math.max(0, state.blueTeamScore + points),
       }))
     }
     get().checkVictory()
@@ -61,7 +61,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   switchTeam: () => {
     set((state) => ({
-      currentTeam: state.currentTeam === 'red' ? 'white' : 'red',
+      currentTeam: state.currentTeam === 'red' ? 'blue' : 'red',
       currentRound: state.currentRound + 1,
     }))
   },
@@ -164,7 +164,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({
       currentPhase: 'preparation',
       redTeamScore: 0,
-      whiteTeamScore: 0,
+      blueTeamScore: 0,
       currentTeam: 'red',
       currentRound: 1,
       timeLeft: ROUND_DURATION,
@@ -181,11 +181,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   checkVictory: () => {
-    const { redTeamScore, whiteTeamScore } = get()
+    const { redTeamScore, blueTeamScore } = get()
     if (redTeamScore >= WINNING_SCORE) {
       set({ winner: 'red' })
-    } else if (whiteTeamScore >= WINNING_SCORE) {
-      set({ winner: 'white' })
+    } else if (blueTeamScore >= WINNING_SCORE) {
+      set({ winner: 'blue' })
     }
   },
 }))

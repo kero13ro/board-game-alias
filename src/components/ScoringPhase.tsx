@@ -4,7 +4,7 @@ import { Scoreboard } from './Scoreboard'
 export const ScoringPhase = () => {
   const {
     redTeamScore,
-    whiteTeamScore,
+    blueTeamScore,
     currentTeam,
     correctAnswers,
     skippedQuestions,
@@ -17,7 +17,7 @@ export const ScoringPhase = () => {
 
   const teamNames = {
     red: '紅隊',
-    white: '白隊',
+    blue: '藍隊',
   }
 
   const handleConfirm = () => {
@@ -31,7 +31,7 @@ export const ScoringPhase = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-secondary/20 to-accent/20 flex flex-col justify-center items-center p-3">
+    <div className="min-h-screen from-secondary/20 to-accent/20 flex flex-col justify-center items-center p-3">
       <div className="card bg-base-100 shadow-xl p-4 w-full max-w-sm">
         <h2 className="text-xl font-bold text-center text-base-content mb-4">
           回合結束
@@ -40,7 +40,7 @@ export const ScoringPhase = () => {
         {/* Scoreboard */}
         <Scoreboard
           redScore={redTeamScore}
-          whiteScore={whiteTeamScore}
+          blueScore={blueTeamScore}
           className="mb-4"
         />
 
@@ -48,7 +48,7 @@ export const ScoringPhase = () => {
         <div className="text-center mb-4">
           <div className="text-xs text-base-content/70 mb-3">
             <span
-              className={currentTeam === 'red' ? 'text-error' : 'text-base-content'}
+              className={currentTeam === 'red' ? 'text-error' : 'text-primary'}
             >
               {teamNames[currentTeam]}
             </span>
@@ -64,7 +64,7 @@ export const ScoringPhase = () => {
               −
             </button>
             <div className="text-xl font-bold text-base-content min-w-[2.5rem] text-center text-success">
-              {currentTeam === 'red' ? redTeamScore : whiteTeamScore}
+              {currentTeam === 'red' ? redTeamScore : blueTeamScore}
             </div>
             <button
               onClick={() => handleScoreAdjustment(1)}
@@ -130,7 +130,7 @@ export const ScoringPhase = () => {
 
         {/* Next Team Indicator */}
         <div className="text-center mt-3 text-xs text-base-content/70">
-          下一回合：{currentTeam === 'red' ? teamNames.white : teamNames.red}
+          下一回合：{currentTeam === 'red' ? teamNames.blue : teamNames.red}
         </div>
       </div>
     </div>

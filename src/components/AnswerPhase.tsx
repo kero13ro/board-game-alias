@@ -16,7 +16,7 @@ export const AnswerPhase = () => {
 
   const teamNames = {
     red: '紅隊',
-    white: '白隊',
+    blue: '藍隊',
   }
 
   const handleCorrectClick = () => {
@@ -28,7 +28,7 @@ export const AnswerPhase = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/20 to-secondary/20 flex flex-col justify-center items-center p-3">
+    <div className="min-h-screen from-primary/20 to-secondary/20 flex flex-col justify-center items-center p-3">
       <div className="w-full max-w-sm space-y-4">
         
         {/* Timer */}
@@ -40,7 +40,7 @@ export const AnswerPhase = () => {
         <div className="card bg-base-100 shadow-lg p-4 text-center">
           <div
             className={`text-lg font-bold mb-2 ${
-              currentTeam === 'red' ? 'text-error' : 'text-base-content'
+              currentTeam === 'red' ? 'text-error' : 'text-primary'
             }`}
           >
             {teamNames[currentTeam]}
