@@ -35,12 +35,12 @@ export const Scoreboard = ({
       <div
         className={`card bg-base-200 shadow-lg text-center p-6 transition-all ${
           currentTeam === 'white'
-            ? 'ring-2 ring-neutral bg-neutral/10'
+            ? 'ring-2 ring-base-content bg-base-content/10'
             : ''
         }`}
       >
-        <div className="text-neutral font-bold text-lg mb-1">白隊</div>
-        <div className="text-3xl font-bold text-neutral">{whiteScore}</div>
+        <div className="text-base-content font-bold text-lg mb-1">白隊</div>
+        <div className="text-3xl font-bold text-base-content">{whiteScore}</div>
         <div className="text-sm text-base-content/70">分</div>
       </div>
     </div>

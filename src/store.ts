@@ -1,8 +1,9 @@
 import { create } from 'zustand'
 import type { GameState, GameActions, Team, GamePhase } from './types'
+import { getCurrentQuestion } from './lib/questions'
 
 const WINNING_SCORE = 30
-const ROUND_DURATION = 60 // 60 seconds
+const ROUND_DURATION = 30 // 60 seconds
 
 interface GameStore extends GameState, GameActions {}
 
@@ -18,6 +19,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   currentQuestionIndex: 0,
   correctAnswers: 0,
   skippedQuestions: [],
+  successQuestions: [],
   wrongQuestions: [],
   showRulesModal: false,
   countdownValue: 3,
@@ -83,22 +85,32 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   // Question handling
   handleCorrectAnswer: () => {
-    const { currentTeam, correctAnswers } = get()
-    set({
+    const { currentTeam, correctAnswers, currentQuestionIndex } = get()
+    
+    const currentQuestion = getCurrentQuestion(currentQuestionIndex)
+    
+    set((state) => ({
       correctAnswers: correctAnswers + 1,
-      currentQuestionIndex: get().currentQuestionIndex + 1,
-    })
+      currentQuestionIndex: currentQuestionIndex + 1,
+      successQuestions: [...state.successQuestions, {
+        id: currentQuestionIndex,
+        text: currentQuestion.text
+      }]
+    }))
     get().updateScore(currentTeam, 1)
   },
 
   handleSkipQuestion: () => {
-    const currentQuestion = {
-      id: get().currentQuestionIndex,
-      text: `Question ${get().currentQuestionIndex + 1}`,
-    }
+    const { currentQuestionIndex } = get()
+    
+    const currentQuestion = getCurrentQuestion(currentQuestionIndex)
+    
     set((state) => ({
-      skippedQuestions: [...state.skippedQuestions, currentQuestion],
-      currentQuestionIndex: state.currentQuestionIndex + 1,
+      skippedQuestions: [...state.skippedQuestions, {
+        id: currentQuestionIndex,
+        text: currentQuestion.text
+      }],
+      currentQuestionIndex: currentQuestionIndex + 1,
     }))
   },
 
@@ -111,6 +123,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({
       correctAnswers: 0,
       skippedQuestions: [],
+      successQuestions: [],
       wrongQuestions: [],
       currentQuestionIndex: 0,
       timeLeft: ROUND_DURATION,
@@ -128,6 +141,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({
       correctAnswers: 0,
       skippedQuestions: [],
+      successQuestions: [],
       wrongQuestions: [],
       currentQuestionIndex: 0,
       timeLeft: ROUND_DURATION,
@@ -158,6 +172,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       currentQuestionIndex: 0,
       correctAnswers: 0,
       skippedQuestions: [],
+      successQuestions: [],
       wrongQuestions: [],
       showRulesModal: false,
       countdownValue: 3,

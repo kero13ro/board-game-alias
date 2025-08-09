@@ -37,7 +37,7 @@ export const RulesModal = ({ isOpen, onClose }: RulesModalProps) => {
               <h3 className="font-semibold mb-2">遊戲進行：</h3>
               <ul className="space-y-2 text-sm">
                 <li>• 隊員們可以不斷搶答，直到答對或是選擇略過</li>
-                <li>• 向右滑動表示答對，向左滑動表示跳過</li>
+                <li>• 點擊「答對」按鈕表示答對，點擊「跳過」按鈕表示跳過</li>
                 <li>• 時間到即結算該回合的成果</li>
                 <li>• 答對一題得一分</li>
               </ul>

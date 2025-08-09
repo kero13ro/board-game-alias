@@ -3,9 +3,8 @@ export type GamePhase = 'preparation' | 'countdown' | 'answer' | 'scoring'
 export type Team = 'red' | 'white'
 
 export interface Question {
-  id: number
+  id: string | number
   text: string
-  category?: string
 }
 
 export interface GameState {
@@ -26,6 +25,7 @@ export interface GameState {
   currentQuestionIndex: number
   correctAnswers: number
   skippedQuestions: Question[]
+  successQuestions: Question[]
   wrongQuestions: Question[]
 
   // UI state

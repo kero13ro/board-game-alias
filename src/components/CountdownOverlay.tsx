@@ -30,7 +30,7 @@ export const CountdownOverlay = () => {
       transition={{ duration: 0.3 }}
     >
       <motion.div 
-        className="card bg-base-100/10 backdrop-blur-md border border-base-content/20 p-8 text-center"
+        className="card bg-base-100/10 backdrop-blur-md border border-base-content/20 p-8 text-center w-[180px]"
         initial={{ scale: 0.8, y: 50 }}
         animate={{ scale: 1, y: 0 }}
         transition={{ type: "spring", stiffness: 300, damping: 25 }}
@@ -50,16 +50,16 @@ export const CountdownOverlay = () => {
           {countdownValue}
         </motion.div>
         <motion.div 
-          className="text-2xl text-white font-medium drop-shadow-md"
+          className="text-2xl text-white font-medium drop-shadow-md text-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
           {countdownValue === 3
-            ? '準備開始...'
+            ? '準備開始'
             : countdownValue === 2
-              ? '準備...'
-              : '開始！'}
+              ? '準備'
+              : '開始'}
         </motion.div>
       </motion.div>
     </motion.div>

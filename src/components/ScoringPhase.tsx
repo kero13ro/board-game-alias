@@ -8,6 +8,7 @@ export const ScoringPhase = () => {
     currentTeam,
     correctAnswers,
     skippedQuestions,
+    successQuestions,
     adjustScore,
     switchTeam,
     resetRound,
@@ -40,7 +41,7 @@ export const ScoringPhase = () => {
         <div className="text-center mb-6">
           <div
             className={`text-xl font-bold mb-2 ${
-              currentTeam === 'red' ? 'text-error' : 'text-neutral'
+              currentTeam === 'red' ? 'text-error' : 'text-base-content'
             }`}
           >
             {teamNames[currentTeam]}
@@ -57,24 +58,46 @@ export const ScoringPhase = () => {
           whiteScore={whiteTeamScore}
           className="mb-6"
         />
-
-        {/* Skipped Questions */}
-        {skippedQuestions.length > 0 && (
-          <div className="mb-6">
-            <h3 className="text-lg font-semibold text-base-content mb-3">
-              跳過的題目：
-            </h3>
-            <div className="card bg-base-200 shadow-inner p-4 max-h-32 overflow-y-auto">
-              <div className="space-y-2">
-                {skippedQuestions.map((question, index) => (
-                  <div key={question.id} className="text-sm text-base-content/80">
-                    {index + 1}. {question.text}
-                  </div>
-                ))}
+        
+        {/* Questions Summary */}
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          {/* Success Questions */}
+          {successQuestions.length > 0 && (
+            <div className="card bg-success/10 p-4">
+              <h3 className="text-lg font-semibold text-success mb-3 text-center">
+                ✅ 答對題目
+              </h3>
+              <div className="bg-base-100 rounded-lg p-3 max-h-32 overflow-y-auto">
+                <div className="space-y-2">
+                  {successQuestions.map((question, index) => (
+                    <div key={question.id} className="text-sm text-base-content">
+                      {index + 1}. {question.text}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+          
+          {/* Skipped Questions */}
+          {skippedQuestions.length > 0 && (
+            <div className="card bg-warning/10 p-4">
+              <h3 className="text-lg font-semibold text-warning mb-3 text-center">
+                ❌ 跳過題目
+              </h3>
+              <div className="bg-base-100 rounded-lg p-3 max-h-32 overflow-y-auto">
+                <div className="space-y-2">
+                  {skippedQuestions.map((question, index) => (
+                    <div key={question.id} className="text-sm text-base-content">
+                      {index + 1}. {question.text}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
 
         {/* Score Adjustment */}
         <div className="mb-6">

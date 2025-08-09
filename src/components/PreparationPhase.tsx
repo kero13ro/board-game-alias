@@ -28,7 +28,7 @@ export const PreparationPhase = () => {
           <div className="text-xl mb-6">
             恭喜{' '}
             <span
-              className={`font-bold ${winner === 'red' ? 'text-error' : 'text-neutral'}`}
+              className={`font-bold ${winner === 'red' ? 'text-error' : 'text-base-content'}`}
             >
               {teamNames[winner]}
             </span>{' '}
@@ -53,11 +53,7 @@ export const PreparationPhase = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/20 to-accent/20 flex flex-col justify-center items-center p-6">
       <div className="card bg-base-100 shadow-xl p-8 max-w-md w-full">
-        <h1 className="text-3xl font-bold text-center text-base-content mb-8">
-          Board Game Alias
-        </h1>
 
-        {/* Scoreboard */}
         <Scoreboard
           redScore={redTeamScore}
           whiteScore={whiteTeamScore}
@@ -65,12 +61,11 @@ export const PreparationPhase = () => {
           className="mb-8"
         />
 
-        {/* Current Team Indicator */}
         <div className="card bg-base-200 shadow-inner p-4 text-center mb-8">
           <div className="text-lg text-base-content/80 mb-2">準備猜題</div>
           <div
             className={`text-2xl font-bold ${
-              currentTeam === 'red' ? 'text-error' : 'text-neutral'
+              currentTeam === 'red' ? 'text-error' : 'text-base-content'
             }`}
           >
             {teamNames[currentTeam]}
