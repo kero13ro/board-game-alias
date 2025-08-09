@@ -31,111 +31,105 @@ export const ScoringPhase = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-secondary/20 to-accent/20 flex flex-col justify-center items-center p-6">
-      <div className="card bg-base-100 shadow-xl p-6 max-w-md w-full">
-        <h2 className="text-2xl font-bold text-center text-base-content mb-6">
+    <div className="min-h-screen bg-gradient-to-br from-secondary/20 to-accent/20 flex flex-col justify-center items-center p-3">
+      <div className="card bg-base-100 shadow-xl p-4 w-full max-w-sm">
+        <h2 className="text-xl font-bold text-center text-base-content mb-4">
           回合結束
         </h2>
-
-        {/* Current Team Results */}
-        <div className="text-center mb-6">
-          <div
-            className={`text-xl font-bold mb-2 ${
-              currentTeam === 'red' ? 'text-error' : 'text-base-content'
-            }`}
-          >
-            {teamNames[currentTeam]}
-          </div>
-          <div className="text-3xl font-bold text-success mb-2">
-            +{correctAnswers}
-          </div>
-          <div className="text-sm text-base-content/70">答對 {correctAnswers} 題</div>
-        </div>
 
         {/* Scoreboard */}
         <Scoreboard
           redScore={redTeamScore}
           whiteScore={whiteTeamScore}
-          className="mb-6"
+          className="mb-4"
         />
-        
-        {/* Questions Summary */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          {/* Success Questions */}
-          {successQuestions.length > 0 && (
-            <div className="card bg-success/10 p-4">
-              <h3 className="text-lg font-semibold text-success mb-3 text-center">
-                ✅ 答對題目
-              </h3>
-              <div className="bg-base-100 rounded-lg p-3 max-h-32 overflow-y-auto">
-                <div className="space-y-2">
-                  {successQuestions.map((question, index) => (
-                    <div key={question.id} className="text-sm text-base-content">
-                      {index + 1}. {question.text}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-          
-          {/* Skipped Questions */}
-          {skippedQuestions.length > 0 && (
-            <div className="card bg-warning/10 p-4">
-              <h3 className="text-lg font-semibold text-warning mb-3 text-center">
-                ❌ 跳過題目
-              </h3>
-              <div className="bg-base-100 rounded-lg p-3 max-h-32 overflow-y-auto">
-                <div className="space-y-2">
-                  {skippedQuestions.map((question, index) => (
-                    <div key={question.id} className="text-sm text-base-content">
-                      {index + 1}. {question.text}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
 
+        {/* Current Team Results & Score Adjustment */}
+        <div className="text-center mb-4">
+          <div className="text-xs text-base-content/70 mb-3">
+            <span
+              className={currentTeam === 'red' ? 'text-error' : 'text-base-content'}
+            >
+              {teamNames[currentTeam]}
+            </span>
+            答對 {correctAnswers} 題
+          </div>
 
-        {/* Score Adjustment */}
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold text-base-content mb-3 text-center">
-            調整分數
-          </h3>
-          <div className="flex items-center justify-center gap-4">
+          {/* Inline Score Adjustment */}
+          <div className="flex items-center justify-center gap-3">
             <button
               onClick={() => handleScoreAdjustment(-1)}
-              className="btn btn-error w-12 h-12 rounded-full text-2xl font-bold"
+              className="btn btn-error w-10 h-10 rounded-full text-xl font-bold"
             >
               −
             </button>
-            <div className="text-2xl font-bold text-base-content min-w-[3rem] text-center">
+            <div className="text-xl font-bold text-base-content min-w-[2.5rem] text-center text-success">
               {currentTeam === 'red' ? redTeamScore : whiteTeamScore}
             </div>
             <button
               onClick={() => handleScoreAdjustment(1)}
-              className="btn btn-success w-12 h-12 rounded-full text-2xl font-bold"
+              className="btn btn-success w-10 h-10 rounded-full text-xl font-bold"
             >
               +
             </button>
           </div>
-          <div className="text-xs text-base-content/60 text-center mt-2">
-            {teamNames[currentTeam]} 目前分數
-          </div>
+        </div>
+
+        {/* Questions Summary */}
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          {/* Success Questions */}
+          {successQuestions.length > 0 && (
+            <div className="card bg-success/10 p-3">
+              <h3 className="text-sm font-semibold text-success mb-2 text-center">
+                ✅ 答對題目
+              </h3>
+              <div className="bg-base-100 rounded-lg p-2 max-h-24 overflow-y-auto">
+                <div className="space-y-1">
+                  {successQuestions.map((question, index) => (
+                    <div
+                      key={question.id}
+                      className="text-xs text-base-content break-words"
+                    >
+                      {index + 1}. {question.text}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Skipped Questions */}
+          {skippedQuestions.length > 0 && (
+            <div className="card bg-warning/10 p-3">
+              <h3 className="text-sm font-semibold text-warning mb-2 text-center">
+                ❌ 跳過題目
+              </h3>
+              <div className="bg-base-100 rounded-lg p-2 max-h-24 overflow-y-auto">
+                <div className="space-y-1">
+                  {skippedQuestions.map((question, index) => (
+                    <div
+                      key={question.id}
+                      className="text-xs text-base-content break-words"
+                    >
+                      {index + 1}. {question.text}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Confirm Button */}
         <button
           onClick={handleConfirm}
-          className="btn btn-primary w-full py-3 px-6 font-medium"
+          className="btn btn-primary w-full py-2 px-4 text-sm font-medium"
         >
           確定 - 換隊
         </button>
 
         {/* Next Team Indicator */}
-        <div className="text-center mt-4 text-sm text-base-content/70">
+        <div className="text-center mt-3 text-xs text-base-content/70">
           下一回合：{currentTeam === 'red' ? teamNames.white : teamNames.red}
         </div>
       </div>
