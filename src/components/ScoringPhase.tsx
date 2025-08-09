@@ -16,7 +16,6 @@ export const ScoringPhase = () => {
     setPhase,
   } = useGameStore()
 
-
   const handleConfirm = () => {
     resetRound()
     switchTeam()
@@ -44,9 +43,7 @@ export const ScoringPhase = () => {
         {/* Current Team Results & Score Adjustment */}
         <div className="text-center mb-4">
           <div className="text-xs text-base-content/70 mb-3">
-            <span
-              className={getTeamColorClass(currentTeam, 'text')}
-            >
+            <span className={getTeamColorClass(currentTeam, 'text')}>
               {TEAM_NAMES[currentTeam]}
             </span>
             答對 {correctAnswers} 題
