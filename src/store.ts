@@ -1,27 +1,31 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 import type { GameState, GameActions, Team, GamePhase } from './types'
-import { getCurrentQuestion } from './lib/questions'
+import { getCurrentQuestion, getTotalQuestions } from './lib/questions'
 import { WINNING_SCORE, ROUND_DURATION } from './lib/constants'
 
 interface GameStore extends GameState, GameActions {}
 
-export const useGameStore = create<GameStore>((set, get) => ({
-  // Initial state
-  currentPhase: 'preparation',
-  redTeamScore: 0,
-  blueTeamScore: 0,
-  currentTeam: 'red',
-  currentRound: 1,
-  timeLeft: ROUND_DURATION,
-  isTimerActive: false,
-  currentQuestionIndex: 0,
-  correctAnswers: 0,
-  skippedQuestions: [],
-  successQuestions: [],
-  wrongQuestions: [],
-  showRulesModal: false,
-  countdownValue: 3,
-  winner: null,
+export const useGameStore = create<GameStore>()(
+  persist(
+    (set, get) => ({
+      // Initial state
+      currentPhase: 'preparation',
+      redTeamScore: 0,
+      blueTeamScore: 0,
+      currentTeam: 'red',
+      currentRound: 1,
+      timeLeft: ROUND_DURATION,
+      isTimerActive: false,
+      currentQuestionIndex: 0,
+      correctAnswers: 0,
+      skippedQuestions: [],
+      successQuestions: [],
+      wrongQuestions: [],
+      usedQuestions: new Set(),
+      showRulesModal: false,
+      countdownValue: 3,
+      winner: null,
 
   // Phase management
   setPhase: (phase: GamePhase) => {
@@ -82,6 +86,28 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   // Question handling
+  getRandomUnusedQuestion: () => {
+    const { usedQuestions } = get()
+    const totalQuestions = getTotalQuestions()
+    
+    if (usedQuestions.size >= totalQuestions) {
+      // Reset if all questions are used
+      set({ usedQuestions: new Set() })
+      return 0
+    }
+
+    let randomIndex
+    do {
+      randomIndex = Math.floor(Math.random() * totalQuestions)
+    } while (usedQuestions.has(randomIndex))
+
+    set((state) => ({
+      usedQuestions: new Set([...state.usedQuestions, randomIndex])
+    }))
+
+    return randomIndex
+  },
+
   handleCorrectAnswer: () => {
     const { currentTeam, correctAnswers, currentQuestionIndex } = get()
 
@@ -89,14 +115,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     set((state) => ({
       correctAnswers: correctAnswers + 1,
-      currentQuestionIndex: currentQuestionIndex + 1,
-      successQuestions: [
-        ...state.successQuestions,
-        {
-          id: currentQuestionIndex,
-          text: currentQuestion.text,
-        },
-      ],
+      currentQuestionIndex: get().getRandomUnusedQuestion(),
+      successQuestions: [...state.successQuestions, currentQuestion],
     }))
     get().updateScore(currentTeam, 1)
   },
@@ -107,19 +127,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const currentQuestion = getCurrentQuestion(currentQuestionIndex)
 
     set((state) => ({
-      skippedQuestions: [
-        ...state.skippedQuestions,
-        {
-          id: currentQuestionIndex,
-          text: currentQuestion.text,
-        },
-      ],
-      currentQuestionIndex: currentQuestionIndex + 1,
+      skippedQuestions: [...state.skippedQuestions, currentQuestion],
+      currentQuestionIndex: get().getRandomUnusedQuestion(),
     }))
   },
 
   nextQuestion: () => {
-    set((state) => ({ currentQuestionIndex: state.currentQuestionIndex + 1 }))
+    set({ currentQuestionIndex: get().getRandomUnusedQuestion() })
   },
 
   // Round management
@@ -129,7 +143,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       skippedQuestions: [],
       successQuestions: [],
       wrongQuestions: [],
-      currentQuestionIndex: 0,
+      currentQuestionIndex: get().getRandomUnusedQuestion(),
       timeLeft: ROUND_DURATION,
     })
     get().startTimer()
@@ -147,7 +161,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       skippedQuestions: [],
       successQuestions: [],
       wrongQuestions: [],
-      currentQuestionIndex: 0,
+      currentQuestionIndex: get().getRandomUnusedQuestion(),
       timeLeft: ROUND_DURATION,
       isTimerActive: false,
     })
@@ -178,6 +192,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       skippedQuestions: [],
       successQuestions: [],
       wrongQuestions: [],
+      usedQuestions: new Set(),
       showRulesModal: false,
       countdownValue: 3,
       winner: null,
@@ -192,4 +207,33 @@ export const useGameStore = create<GameStore>((set, get) => ({
       set({ winner: 'blue' })
     }
   },
-}))
+    }),
+    {
+      name: 'alias-game-storage',
+      storage: {
+        getItem: (name) => {
+          const str = localStorage.getItem(name)
+          if (!str) return null
+          const data = JSON.parse(str)
+          // Convert usedQuestions array back to Set
+          if (data.state && data.state.usedQuestions) {
+            data.state.usedQuestions = new Set(data.state.usedQuestions)
+          }
+          return data
+        },
+        setItem: (name, value) => {
+          // Convert usedQuestions Set to array for serialization
+          const serialized = {
+            ...value,
+            state: {
+              ...value.state,
+              usedQuestions: Array.from(value.state.usedQuestions || new Set())
+            }
+          }
+          localStorage.setItem(name, JSON.stringify(serialized))
+        },
+        removeItem: (name) => localStorage.removeItem(name),
+      },
+    }
+  )
+)

@@ -2,10 +2,7 @@ export type GamePhase = 'preparation' | 'countdown' | 'answer' | 'scoring'
 
 export type Team = 'red' | 'blue'
 
-export interface Question {
-  id: string | number
-  text: string
-}
+export type Question = string
 
 export interface GameState {
   // Game phase management
@@ -27,6 +24,7 @@ export interface GameState {
   skippedQuestions: Question[]
   successQuestions: Question[]
   wrongQuestions: Question[]
+  usedQuestions: Set<number>
 
   // UI state
   showRulesModal: boolean
@@ -55,6 +53,7 @@ export interface GameActions {
   handleCorrectAnswer: () => void
   handleSkipQuestion: () => void
   nextQuestion: () => void
+  getRandomUnusedQuestion: () => number
 
   // Round management
   startRound: () => void

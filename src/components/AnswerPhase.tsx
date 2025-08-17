@@ -50,7 +50,7 @@ export const AnswerPhase = () => {
               damping: 25,
               delay: 0.1,
             }}
-            key={currentQuestion.id}
+            key={currentQuestionIndex}
           >
             <div className="flex flex-col justify-center">
               <div className="text-sm text-primary/70 font-medium">
@@ -63,7 +63,7 @@ export const AnswerPhase = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2, duration: 0.4 }}
               >
-                {currentQuestion.text}
+                {currentQuestion}
               </motion.div>
             </div>
           </motion.div>
