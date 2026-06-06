@@ -1,104 +1,104 @@
-import { motion } from 'motion/react'
+import { motion, AnimatePresence } from 'motion/react'
 import { useState } from 'react'
 import { getCurrentQuestion } from '../lib/questions'
 import { useGameStore } from '../store'
+import { getTeamClasses } from '../lib/constants'
 import { Timer } from './Timer'
 
 const throttleDelay = 1000
 
 export const AnswerPhase = () => {
-  const { currentQuestionIndex, handleCorrectAnswer, handleSkipQuestion } =
-    useGameStore()
-
+  const {
+    currentQuestionIndex,
+    currentTeam,
+    successQuestions,
+    skippedQuestions,
+    handleCorrectAnswer,
+    handleSkipQuestion,
+  } = useGameStore()
+  const t = getTeamClasses(currentTeam)
   const currentQuestion = getCurrentQuestion(currentQuestionIndex)
+  // 本回合第幾題（不是全域隨機索引）
+  const roundQuestionNo =
+    successQuestions.length + skippedQuestions.length + 1
   const [isThrottled, setIsThrottled] = useState(false)
 
-  const handleCorrectClick = () => {
+  const guard = (fn: () => void) => () => {
     if (isThrottled) return
-
     setIsThrottled(true)
-    handleCorrectAnswer()
-
-    setTimeout(() => setIsThrottled(false), throttleDelay)
-  }
-
-  const handleSkipClick = () => {
-    if (isThrottled) return
-
-    setIsThrottled(true)
-    handleSkipQuestion()
-
+    fn()
     setTimeout(() => setIsThrottled(false), throttleDelay)
   }
 
   return (
-    <div className="min-h-screen from-primary/20 to-secondary/20 flex flex-col justify-center items-center p-3">
-      <div className="w-full max-w-sm space-y-4">
-        <div className="card bg-base-100 shadow-xl text-center">
-          <Timer />
+    <div className={`relative flex min-h-screen flex-col overflow-hidden ${t.tint}`}>
+      {/* 柔光裝飾 */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className={`absolute -right-16 -top-10 h-52 w-52 rounded-full blur-sm ${t.soft}`} />
+        <div className={`absolute -bottom-16 -left-12 h-48 w-48 rounded-full blur-sm ${t.soft}`} />
+      </div>
+
+      {/* 頂部：隊伍 + 環形計時 */}
+      <div className="relative flex items-center gap-3 px-5 pb-3 pt-7">
+        <div className={`rounded-full px-3 py-1.5 text-sm font-bold ${t.solid} ${t.solidText}`}>
+          {t.name}
         </div>
+        <Timer
+          className="ml-auto"
+          strokeClass={currentTeam === 'red' ? 'stroke-error' : 'stroke-primary'}
+        />
+      </div>
 
-        {/* Question Card */}
-        <div className="relative">
+      {/* 題目大卡 */}
+      <div className="relative flex flex-1 items-center px-5">
+        <AnimatePresence mode="wait">
           <motion.div
-            className="card bg-gradient-to-br from-primary/5 to-secondary/5 border-2 border-primary/20 shadow-2xl p-8 text-center rounded-3xl"
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{
-              type: 'spring',
-              stiffness: 400,
-              damping: 25,
-              delay: 0.1,
-            }}
             key={currentQuestionIndex}
+            className={`card bg-base-100 w-full border-[3px] px-6 py-12 text-center shadow-2xl ${t.border} ${t.shadow}`}
+            initial={{ scale: 0.85, opacity: 0, y: 12 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.9, opacity: 0, y: -12 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 26 }}
           >
-            <div className="flex flex-col justify-center">
-              <div className="text-sm text-primary/70 font-medium">
-                #{currentQuestionIndex + 1}
-              </div>
-
-              <motion.div
-                className="text-4xl font-bold my-6 break-words hyphens-auto leading-tight"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2, duration: 0.4 }}
-              >
-                {currentQuestion}
-              </motion.div>
+            <div className={`mb-5 inline-block rounded-full px-3 py-1 ${t.soft} ${t.text} font-num text-sm font-bold`}>
+              第 {roundQuestionNo} 題
+            </div>
+            <div className={`font-num text-6xl font-bold leading-tight ${t.text} break-words`}>
+              {currentQuestion}
             </div>
           </motion.div>
-        </div>
+        </AnimatePresence>
+      </div>
 
-        {/* Instructions */}
-        <div className="card bg-base-100/80 backdrop-blur shadow-lg "></div>
-        <div className="text-xs text-base-content/80 mb-2 break-words pt-4 pb-2 text-center">
-          描述這個詞語，但不能說出答案中的文字！
-        </div>
+      {/* 提示 */}
+      <div className="relative px-6 pb-3 text-center">
+        <p className="text-base-content/60 text-sm font-medium text-pretty">
+          描述這個詞語，但<span className={`font-bold ${t.text}`}>不能說出</span>答案中的文字！
+        </p>
+      </div>
 
-        {/* Action Buttons */}
-        <motion.div
-          className="flex gap-3"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+      {/* 大按鈕 */}
+      <div className="relative grid grid-cols-2 gap-3 px-5 pb-7">
+        <motion.button
+          onClick={guard(handleSkipQuestion)}
+          disabled={isThrottled}
+          className={`btn btn-warning h-auto flex-col gap-0.5 rounded-2xl py-5 text-lg shadow-[0_6px_0_0_#d96a26] ${isThrottled ? 'opacity-50' : ''}`}
+          whileHover={!isThrottled ? { scale: 1.04 } : {}}
+          whileTap={!isThrottled ? { scale: 0.95 } : {}}
         >
-          <motion.button
-            onClick={handleSkipClick}
-            className={`btn btn-warning flex-1 py-3 px-4 text-base font-medium ${isThrottled ? 'opacity-50 cursor-not-allowed' : ''}`}
-            whileHover={!isThrottled ? { scale: 1.05 } : {}}
-            whileTap={!isThrottled ? { scale: 0.95 } : {}}
-          >
-            ❌ 跳過
-          </motion.button>
-          <motion.button
-            onClick={handleCorrectClick}
-            className={`btn btn-success flex-1 py-3 px-4 text-base font-medium ${isThrottled ? 'opacity-50 cursor-not-allowed' : ''}`}
-            whileHover={!isThrottled ? { scale: 1.05 } : {}}
-            whileTap={!isThrottled ? { scale: 0.95 } : {}}
-          >
-            ✅ 答對
-          </motion.button>
-        </motion.div>
+          <span className="text-2xl">❌</span>
+          <span>跳過</span>
+        </motion.button>
+        <motion.button
+          onClick={guard(handleCorrectAnswer)}
+          disabled={isThrottled}
+          className={`btn btn-success h-auto flex-col gap-0.5 rounded-2xl py-5 text-lg shadow-[0_6px_0_0_#169a53] ${isThrottled ? 'opacity-50' : ''}`}
+          whileHover={!isThrottled ? { scale: 1.04 } : {}}
+          whileTap={!isThrottled ? { scale: 0.95 } : {}}
+        >
+          <span className="text-2xl">✅</span>
+          <span>答對</span>
+        </motion.button>
       </div>
     </div>
   )

@@ -1,3 +1,4 @@
+import { motion } from 'motion/react'
 import type { Team } from '../types'
 
 interface ScoreboardProps {
@@ -7,6 +8,68 @@ interface ScoreboardProps {
   className?: string
 }
 
+const CELLS: Record<
+  Team,
+  { name: string; solid: string; text: string; soft: string; shadow: string }
+> = {
+  red: {
+    name: '紅隊',
+    solid: 'bg-error text-error-content border-transparent',
+    text: 'text-error',
+    soft: 'bg-base-100 border-error/25',
+    shadow: 'shadow-error/40',
+  },
+  blue: {
+    name: '藍隊',
+    solid: 'bg-primary text-primary-content border-transparent',
+    text: 'text-primary',
+    soft: 'bg-base-100 border-primary/25',
+    shadow: 'shadow-primary/40',
+  },
+}
+
+const Cell = ({
+  team,
+  score,
+  active,
+}: {
+  team: Team
+  score: number
+  active: boolean
+}) => {
+  const c = CELLS[team]
+  return (
+    <motion.div
+      animate={{ scale: active ? 1.04 : 1 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      className={`card flex-1 border-2 px-3 py-3 text-center ${
+        active ? `${c.solid} shadow-xl ${c.shadow}` : c.soft
+      }`}
+    >
+      <div className={`text-sm font-bold tracking-wide ${active ? '' : c.text}`}>
+        {c.name}
+      </div>
+      <motion.div
+        key={score}
+        initial={{ scale: 0.5, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: 'spring', stiffness: 400, damping: 18 }}
+        className="font-num mt-1 text-4xl font-bold leading-none"
+      >
+        {score}
+      </motion.div>
+      <div className={`mt-0.5 text-[11px] ${active ? 'opacity-90' : 'opacity-60'}`}>
+        / 30 分
+      </div>
+      {active && (
+        <div className="bg-base-100/25 mt-1 inline-block rounded-full px-2 py-0.5 text-[10px] font-bold">
+          這回合
+        </div>
+      )}
+    </motion.div>
+  )
+}
+
 export const Scoreboard = ({
   redScore,
   blueScore,
@@ -14,33 +77,12 @@ export const Scoreboard = ({
   className = '',
 }: ScoreboardProps) => {
   return (
-    <div className={`flex justify-center items-center gap-4 p-2 ${className}`}>
-      {/* Red Team */}
-      <div
-        className={`card bg-base-200 shadow-lg text-center p-3 transition-all w-full ${
-          currentTeam === 'red' ? 'ring-2 ring-error bg-error/10' : ''
-        }`}
-      >
-        <div className="text-error font-bold text-sm mb-1">紅隊</div>
-        <div className="text-2xl font-bold">{redScore}</div>
-        <div className="text-xs text-base-content/70">分</div>
-      </div>
-
-      {/* VS Divider */}
-      <div className="text-lg font-bold text-base-content/60 bg-base-300 px-2 py-1 rounded-full">
+    <div className={`flex items-stretch gap-2.5 ${className}`}>
+      <Cell team="red" score={redScore} active={currentTeam === 'red'} />
+      <div className="font-num text-base-content/35 flex items-center text-lg font-bold">
         VS
       </div>
-
-      {/* Blue Team */}
-      <div
-        className={`card bg-base-200 shadow-lg text-center p-3 transition-all w-full ${
-          currentTeam === 'blue' ? 'ring-2 ring-primary bg-primary/10' : ''
-        }`}
-      >
-        <div className="text-primary font-bold text-sm mb-1">藍隊</div>
-        <div className="text-2xl font-bold ">{blueScore}</div>
-        <div className="text-xs text-base-content/70">分</div>
-      </div>
+      <Cell team="blue" score={blueScore} active={currentTeam === 'blue'} />
     </div>
   )
 }

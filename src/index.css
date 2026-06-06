@@ -1,6 +1,52 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@plugin "daisyui" {
+  themes: false; /* 不產生內建主題，只用下面自訂的 alias */
+}
+
+/* 自訂派對風主題 alias（daisyUI 5 CSS-first 正規寫法）*/
+@plugin "daisyui/theme" {
+  name: 'alias';
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+
+  --color-base-100: #fffdf8; /* 米白底 */
+  --color-base-200: #fff3e6;
+  --color-base-300: #ffe2c4;
+  --color-base-content: #28233a;
+  --color-primary: #2c6bff; /* 藍隊 */
+  --color-primary-content: #ffffff;
+  --color-secondary: #b14cff;
+  --color-secondary-content: #ffffff;
+  --color-accent: #ffc02e;
+  --color-accent-content: #3a2a00;
+  --color-neutral: #272340;
+  --color-neutral-content: #ffffff;
+  --color-info: #34c3f8;
+  --color-info-content: #ffffff;
+  --color-success: #1fc16b; /* ✅ 答對 */
+  --color-success-content: #ffffff;
+  --color-warning: #ff8a3d; /* ❌ 跳過（暖橘）*/
+  --color-warning-content: #ffffff;
+  --color-error: #ff3d5e; /* 紅隊 */
+  --color-error-content: #ffffff;
+
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
+/* 字體：圓體標題 + 數字 Fredoka */
+@theme {
+  --font-sans: 'Noto Sans TC', system-ui, sans-serif;
+  --font-num: 'Fredoka', 'Noto Sans TC', system-ui, sans-serif;
+}
 
 /* Prevent zoom/scaling on mobile */
 html,
@@ -14,4 +60,10 @@ body {
 /* Prevent double-tap zoom */
 * {
   touch-action: manipulation;
+}
+
+/* 圓潤數字（分數 / 倒數 / 計時）*/
+.font-num {
+  font-family: var(--font-num);
+  font-variant-numeric: tabular-nums;
 }
