@@ -38,6 +38,8 @@ export const AnswerPhase = () => {
         <div className={`absolute -bottom-16 -left-12 h-48 w-48 rounded-full blur-sm ${t.soft}`} />
       </div>
 
+      {/* 內容置中容器（桌機限制寬度）*/}
+      <div className="relative z-10 mx-auto flex w-full max-w-sm flex-1 flex-col">
       {/* 頂部：隊伍 + 環形計時 */}
       <div className="relative flex items-center gap-3 px-5 pb-3 pt-7">
         <div className={`rounded-full px-3 py-1.5 text-sm font-bold ${t.solid} ${t.solidText}`}>
@@ -99,6 +101,7 @@ export const AnswerPhase = () => {
           <span className="text-2xl">✅</span>
           <span>答對</span>
         </motion.button>
+      </div>
       </div>
     </div>
   )

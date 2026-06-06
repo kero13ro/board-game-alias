@@ -69,7 +69,7 @@ export const ScoringPhase = () => {
         <div className={`absolute -bottom-20 -left-10 h-48 w-48 rounded-full blur-sm ${t.soft}`} />
       </div>
 
-      <div className="relative flex flex-1 flex-col gap-4 overflow-y-auto px-5 py-6">
+      <div className="relative mx-auto flex w-full max-w-sm flex-1 flex-col gap-4 overflow-y-auto px-5 py-6">
         <motion.div className="text-center" {...popIn}>
           <div className={`font-num text-3xl font-bold ${t.text}`}>回合結束 🏁</div>
         </motion.div>
@@ -135,7 +135,7 @@ export const ScoringPhase = () => {
       </div>
 
       {/* 底部 */}
-      <div className="bg-base-100/70 relative px-5 pb-7 pt-2 backdrop-blur">
+      <div className="bg-base-100/70 relative mx-auto w-full max-w-sm px-5 pb-7 pt-2 backdrop-blur">
         <motion.button
           onClick={handleConfirm}
           className={`btn ${t.btn} h-auto w-full rounded-2xl py-4 text-xl ${t.shadow3d}`}
