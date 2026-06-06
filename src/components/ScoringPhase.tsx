@@ -1,6 +1,13 @@
-import { TEAM_NAMES } from '../lib/constants'
+import type { ReactNode } from 'react'
+import { motion } from 'motion/react'
 import { useGameStore } from '../store'
 import { Scoreboard } from './Scoreboard'
+import { getTeamClasses } from '../lib/constants'
+
+const popIn = {
+  initial: { opacity: 0, y: 20, scale: 0.97 },
+  animate: { opacity: 1, y: 0, scale: 1 },
+}
 
 export const ScoringPhase = () => {
   const {
@@ -15,117 +22,130 @@ export const ScoringPhase = () => {
     setPhase,
   } = useGameStore()
 
+  const t = getTeamClasses(currentTeam)
+  const next = getTeamClasses(currentTeam === 'red' ? 'blue' : 'red')
+  const currentScore = currentTeam === 'red' ? redTeamScore : blueTeamScore
+
   const handleConfirm = () => {
     resetRound()
     switchTeam()
     setPhase('preparation')
   }
 
-  const handleScoreAdjustment = (adjustment: number) => {
-    adjustScore(currentTeam, adjustment)
-  }
+  const QuestionList = ({
+    title,
+    items,
+    accent,
+    chip,
+  }: {
+    title: ReactNode
+    items: string[]
+    accent: string
+    chip: string
+  }) => (
+    <div className={`card bg-base-100 border-2 p-3 ${accent}`}>
+      <div className="mb-2 flex items-center gap-1 text-sm font-bold">
+        {title}
+        <span className="font-num text-xs opacity-60">{items.length}</span>
+      </div>
+      <div className="flex max-h-36 flex-col gap-1 overflow-y-auto pr-1">
+        {items.map((q, i) => (
+          <div key={i} className={`flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm ${chip}`}>
+            <span className="font-num w-4 text-center text-xs font-bold opacity-70">{i + 1}</span>
+            <span className="text-base-content/85 truncate">{q}</span>
+          </div>
+        ))}
+        {items.length === 0 && (
+          <div className="text-base-content/40 px-2 py-3 text-center text-xs">無</div>
+        )}
+      </div>
+    </div>
+  )
 
   return (
-    <div className="min-h-screen from-secondary/20 to-accent/20 flex flex-col justify-center items-center p-3">
-      <div className="card bg-base-100 shadow-xl p-4 w-full max-w-sm">
-        <h2 className="text-xl font-bold text-center text-base-content mb-4">
-          回合結束
-        </h2>
+    <div className={`relative flex min-h-screen flex-col overflow-hidden ${t.tint}`}>
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className={`absolute -right-16 -top-12 h-52 w-52 rounded-full blur-sm ${t.soft}`} />
+        <div className={`absolute -bottom-20 -left-10 h-48 w-48 rounded-full blur-sm ${t.soft}`} />
+      </div>
 
-        {/* Scoreboard */}
-        <Scoreboard
-          redScore={redTeamScore}
-          blueScore={blueTeamScore}
-          className="mb-4"
-        />
+      <div className="relative flex flex-1 flex-col gap-4 overflow-y-auto px-5 py-6">
+        <motion.div className="text-center" {...popIn}>
+          <div className={`font-num text-3xl font-bold ${t.text}`}>回合結束 🏁</div>
+        </motion.div>
 
-        {/* Questions Summary */}
-        <div className="grid grid-cols-2 gap-3 mb-4">
-          {/* Skipped Questions */}
-          {
-            <div className="card bg-warning/10 p-3">
-              <h3 className="text-sm font-semibold text-warning mb-2 text-center">
-                ❌ 跳過題目
-              </h3>
-              <div className="bg-base-100 rounded-lg p-2 max-h-40 overflow-y-auto">
-                <div className="space-y-1">
-                  {skippedQuestions.map((question, index) => (
-                    <div
-                      key={index}
-                      className="text-xs text-base-content break-words"
-                    >
-                      {index + 1}. {question}
-                    </div>
-                  ))}
-                </div>
-              </div>
+        <motion.div {...popIn} transition={{ delay: 0.05 }}>
+          <Scoreboard redScore={redTeamScore} blueScore={blueTeamScore} currentTeam={currentTeam} />
+        </motion.div>
+
+        {/* 本回合答對 + 加減分 */}
+        <motion.div
+          className={`card bg-base-100 flex flex-row items-center justify-between border-2 px-4 py-4 ${t.softBorder}`}
+          {...popIn}
+          transition={{ delay: 0.1 }}
+        >
+          <motion.button
+            onClick={() => adjustScore(currentTeam, -1)}
+            className="btn btn-circle border-0 bg-error/15 text-error h-11 w-11 text-2xl shadow-[0_4px_0_0_#f4ccd3]"
+            whileTap={{ scale: 0.9 }}
+            aria-label="減一分"
+          >
+            −
+          </motion.button>
+          <div className="text-center">
+            <div className="text-base-content/55 text-sm">
+              {t.name}・本回合答對 {successQuestions.length} 題
             </div>
-          }
-
-          {/* Success Questions */}
-          {
-            <div className="card bg-success/10 p-3">
-              <h3 className="text-sm font-semibold text-success mb-2 text-center">
-                ✅ 答對題目
-              </h3>
-              <div className="bg-base-100 rounded-lg p-2 max-h-40 overflow-y-auto">
-                <div className="space-y-1">
-                  {successQuestions.map((question, index) => (
-                    <div
-                      key={index}
-                      className="text-xs text-base-content break-words"
-                    >
-                      {index + 1}. {question}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          }
-        </div>
-
-        {/* Current Team Results & Score Adjustment */}
-        <div className="text-center mb-4">
-          <div className="flex items-center justify-center mb-3 gap-3">
-            <button
-              onClick={() => handleScoreAdjustment(-1)}
-              className="btn btn-error size-8 rounded-full  font-bold"
+            <motion.div
+              key={currentScore}
+              initial={{ scale: 0.6, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 16 }}
+              className={`font-num mt-0.5 text-4xl font-bold leading-none ${t.text}`}
             >
-              −
-            </button>
-            <div className="text-base-content/70">
-              {TEAM_NAMES[currentTeam]} 答對{' '}
-              {currentTeam === 'red' ? redTeamScore : blueTeamScore} 題
-            </div>
-            <button
-              onClick={() => handleScoreAdjustment(1)}
-              className="btn btn-success size-8 rounded-full  font-bold"
-            >
-              +
-            </button>
+              {currentScore}
+              <span className="text-base-content/50 text-lg"> 分</span>
+            </motion.div>
           </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="space-y-2">
-          <button
-            onClick={handleConfirm}
-            className="btn btn-success w-full py-2 px-4 text-sm font-medium"
+          <motion.button
+            onClick={() => adjustScore(currentTeam, 1)}
+            className="btn btn-circle border-0 bg-success/15 text-success h-11 w-11 text-2xl shadow-[0_4px_0_0_#c2ebd3]"
+            whileTap={{ scale: 0.9 }}
+            aria-label="加一分"
           >
-            確定
-          </button>
+            +
+          </motion.button>
+        </motion.div>
 
-          {/* <button
-            onClick={resetGame}
-            className="btn btn-outline btn-error w-full py-2 px-4 text-sm font-medium"
-          >
-            重新開始遊戲
-          </button> */}
-        </div>
+        {/* 兩欄清單 */}
+        <motion.div className="grid grid-cols-2 gap-3" {...popIn} transition={{ delay: 0.15 }}>
+          <QuestionList
+            title="❌ 跳過"
+            items={skippedQuestions}
+            accent="border-warning/30"
+            chip="bg-warning/10"
+          />
+          <QuestionList
+            title="✅ 答對"
+            items={successQuestions}
+            accent="border-success/30"
+            chip="bg-success/10"
+          />
+        </motion.div>
+      </div>
 
-        {/* Next Team Indicator */}
-        <div className="text-center mt-3 text-xs text-base-content/70">
-          下一回合：{currentTeam === 'red' ? TEAM_NAMES.blue : TEAM_NAMES.red}
+      {/* 底部 */}
+      <div className="bg-base-100/70 relative px-5 pb-7 pt-2 backdrop-blur">
+        <motion.button
+          onClick={handleConfirm}
+          className={`btn ${t.btn} h-auto w-full rounded-2xl py-4 text-xl ${t.shadow3d}`}
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.96 }}
+        >
+          確定 ✓
+        </motion.button>
+        <div className="text-base-content/60 mt-3 text-center text-sm">
+          下一回合輪到 <span className={`font-bold ${next.text}`}>{next.name}</span>
         </div>
       </div>
     </div>
